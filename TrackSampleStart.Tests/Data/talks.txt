@@ -1,0 +1,3 @@
+﻿Rails for Python Developers lightning
+Communicating Over Distance 60min
+Accounting-Driven Development 45min
