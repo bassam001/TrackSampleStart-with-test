@@ -7,10 +7,4 @@ namespace TrackSampleStart.Parsers
         bool Success { get; set; }
         TimeSpan Time(string text);
     }
-
-    public abstract class Parser : IParser
-    {
-        public bool Success { get; set; }
-        public abstract TimeSpan Time(string text);
-    }
 }
