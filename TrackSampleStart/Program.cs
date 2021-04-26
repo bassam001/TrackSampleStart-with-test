@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Xml;
+using System.ComponentModel.Design;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
 using TrackSampleStart.Domain;
 using TrackSampleStart.DomainServices;
+using TrackSampleStart.Repository;
 using TrackSampleStart.Shared;
 
 namespace TrackSampleStart
@@ -87,9 +86,19 @@ namespace TrackSampleStart
     {
         static void Main(string[] args)
         {
-            var service = new TrackService();
-            var tracks = new List<Track>();
 
+            var container = new WindsorContainer();
+
+            // Register the type with the container
+            container.Register(Component.For<ITrackService>().ImplementedBy<TrackService>());
+            //container.Register(Component.For<ITrackManager>().ImplementedBy<TrackManager>());
+            //container.Register(Component.For<IGetTalkRepository>().ImplementedBy<GetTalkRepository>());
+
+            // Resolve an object (ask the container for an instance)
+            // This is analagous to calling new() in a non-IoC application.
+
+            var service = container.Resolve<ITrackService>();
+            var tracks = new List<Track>();
             try
             {
                 tracks = service.GetAllTracks();

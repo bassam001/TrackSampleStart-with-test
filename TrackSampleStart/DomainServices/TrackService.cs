@@ -23,9 +23,9 @@ namespace TrackSampleStart.DomainServices
         private TalkManager _talkManager;
 
         public TrackService() :
-             this (new GetTalkRepository(File), 
-                 new TalkManager(new TalkParser()), 
-                 TrackManager.Instance )
+             this(new GetTalkRepository(File),
+                 new TalkManager(new TalkParser()),
+                 TrackManager.Instance)
         {
         }
 
