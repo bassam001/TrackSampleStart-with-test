@@ -37,7 +37,7 @@ namespace TrackSampleStart.Tests
         {
             var tracks = _trackManager.GetTracks();
             var track = tracks.First();
-            track.Sessions.First().Should().Equals(DayPart.Morning);
+            track.Sessions.First().DayPart.Should().Be(DayPart.Morning);
         }
 
     }

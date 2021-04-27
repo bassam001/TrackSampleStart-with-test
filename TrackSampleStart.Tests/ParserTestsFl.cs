@@ -1,20 +1,25 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using TrackSampleStart.Parsers;
 using Xunit;
+using Moq;
+using TrackSampleStart.Repository;
 
 namespace TrackSampleStart.Tests
 { 
     public  class ParserTestsFl
     {
+
+
          [Fact]
         public void It_should_parse_time()
         {
-            var data = "Time is given as number in minutes 60min";
+            var dep = new Mock<ITestRepository>().Object;
 
             var parsing = new TalkParser();
-            var result = parsing.Time(data);
+            var result = parsing.Time(dep.GetFakeData());
             parsing.Success.Should().Be(true);
-            result.Should().Equals(60);
+            result.Should().Be(new TimeSpan(00,15,00));
         }
 
         [Fact]
