@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using FluentAssertions.Types;
 using TrackSampleStart.Domain;
 using TrackSampleStart.DomainServices;
+using TrackSampleStart.Parsers;
+using TrackSampleStart.Repository;
 using TrackSampleStart.Shared;
 
 namespace TrackSampleStart
 {
-    // You are planning a big programming conference and have received many proposals which have passed the initial screen process but you're having trouble 
+    //You are planning a big programming conference and have received many proposals which have passed the initial screen process but you're having trouble 
     // fitting them into the time constraints of the day -- there are so many possibilities!
     // So you write a program to do it for you.
 
@@ -80,15 +85,26 @@ namespace TrackSampleStart
     // 04:00PM Rails for Python Developers lightning
     // 05:00PM Networking Event
 
+
     class Program
     {
         static void Main(string[] args)
         {
-
-            var container = new WindsorContainer();
+        string File = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName,
+            "talks.txt");
+var container = new WindsorContainer();
 
             // Register the type with the container
             container.Register(Component.For<IService>().ImplementedBy<Service>());
+            container.Register(Component.For<ITrackManager>().UsingFactoryMethod(x=> TrackManager.Instance));
+            container.Register(Component.For<IGetTalkRepository>().UsingFactoryMethod(x=> new GetTalkRepository(File)));
+            container.Register(Component.For<IParser>().ImplementedBy<Parser>());
+            container.Register(Component.For<TalkManager>());
+
+
+            //container.Register(Component.For<IParser>());
+
+
 
             // Resolve an object (ask the container for an instance)
             // This is analagous to calling new() in a non-IoC application.

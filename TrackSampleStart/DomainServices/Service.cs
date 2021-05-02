@@ -22,12 +22,12 @@ namespace TrackSampleStart.DomainServices
             "talks.txt");
 
 
-        public Service() :
-             this(new GetTalkRepository(File),
-                 new TalkManager(new TalkParser()),
-                 TrackManager.Instance)
-        {
-        }
+        //public Service() :
+        //     this(new GetTalkRepository(File),
+        //         new TalkManager(new TalkParser()),
+        //         TrackManager.Instance)
+        //{
+        //}
 
         public Service(IGetTalkRepository repository,
                             TalkManager talkManager,
