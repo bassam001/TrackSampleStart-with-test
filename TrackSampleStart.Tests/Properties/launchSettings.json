@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TrackSampleStart.Tests": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\TrackSampleStart-with-test\\TrackSampleStart.Tests"
+    }
+  }
+}

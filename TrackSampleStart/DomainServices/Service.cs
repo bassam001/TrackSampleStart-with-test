@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using TrackSampleStart.Domain;
-using TrackSampleStart.Parsers;
 using TrackSampleStart.Repository;
 
 namespace TrackSampleStart.DomainServices
@@ -20,15 +19,7 @@ namespace TrackSampleStart.DomainServices
 
         private static readonly string File = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName,
             "talks.txt");
-
-
-        //public Service() :
-        //     this(new GetTalkRepository(File),
-        //         new TalkManager(new TalkParser()),
-        //         TrackManager.Instance)
-        //{
-        //}
-
+        
         public Service(IGetTalkRepository repository,
                             TalkManager talkManager,
                             ITrackManager manager)
@@ -41,7 +32,6 @@ namespace TrackSampleStart.DomainServices
 
         public List<Track> GetAllTracks()
         {
-
             var talks = _repository.GetAll();
             _talkManager.ParseTalkEntities(talks);
 
