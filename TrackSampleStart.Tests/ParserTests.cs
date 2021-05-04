@@ -1,58 +1,52 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Castle.Windsor;
+using FluentAssertions;
 using TrackSampleStart.Parsers;
+using Xunit;
+using TrackSampleStart.Domain;
 
 namespace TrackSampleStart.Tests
-{
-    [TestClass]
-    public class ParserTests
+{ 
+    public  class ParserTests
     {
-        [TestMethod]
-        public void TimeParserTest()
+        private IParser _parser;
+        private IWindsorContainer _container;
+        private Talk _talk;
+        private Talk _lightningTalk;
+        
+        public ParserTests()
         {
-            const string data = "Ioc getting started 60min";
-
-            var parser = new TalkParser();
-            var result = parser.Time(data);
-
-            Assert.IsTrue(parser.Success);
-            Assert.AreEqual(60, result.TotalMinutes);
+            _container = new WindsorContainer();
+            _container.Install(new ServicesInstaller());
+            _parser = _container.Resolve<IParser>();
+            _lightningTalk = new Talk { Title = "Rails for Python Developers lightning" };
+             _talk = new Talk { Title = "Lua for the Masses 30min"};
         }
 
+        public void Act()
+        { 
+            _talk.Duration= _parser.MinuteParser(_talk.Title);
+           _lightningTalk.Duration = _parser.LightningParser((_lightningTalk.Title));
 
-        [TestMethod]
-        public void StringMatchesGetMinutesParseTest()
-        {
-            const string data = "Writing Fast Tests Against Enterprise Rails 45min";
-
-            var exp = new MinuteParser();
-            var result = exp.Time(data);
-
-            var wrongparser = new LightningParser();
-            var wrongResult = wrongparser.Time(data);
-
-            Assert.IsFalse(wrongparser.Success);
-            Assert.AreEqual(0, wrongResult.TotalMinutes);
-
-            Assert.IsTrue(exp.Success);
-            Assert.AreEqual(45, result.TotalMinutes);
         }
 
-        [TestMethod]
-        public void StringMatchesLightningParserTest()
+        [Fact]
+        public void It_should_parse_talk_duration()
         {
-            const string data = "Rails for Python Developers lightning";
+            Act();
 
-            var exp = new LightningParser();
-            var result = exp.Time(data);
+           _talk.Duration.Should().Be(new TimeSpan(00, 30, 00));
+           _parser.Success.Should().Be(true);
 
-            var wrongparser = new MinuteParser();
-            var wrongResult = wrongparser.Time(data);
+        }
 
-            Assert.IsFalse(wrongparser.Success);
-            Assert.AreEqual(0, wrongResult.TotalMinutes);
+        [Fact]
+        public void It_should_get_lightning_duration()
+        {
+            Act();
 
-            Assert.IsTrue(exp.Success);
-            Assert.AreEqual(5, result.TotalMinutes);
+            _lightningTalk.Duration.Should().Be(new TimeSpan(00, 5, 00));
+            _parser.Success.Should().Be(true);
         }
     }
 }

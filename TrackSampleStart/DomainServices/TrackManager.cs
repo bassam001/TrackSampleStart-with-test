@@ -21,6 +21,7 @@ namespace TrackSampleStart.DomainServices
         // private ctor so no-one can create an instance
         private TrackManager() { }
 
+
         // static field to hold the singleton
         // initialization is thread-safe because it is handled by the static ctor
         private static readonly TrackManager _instance = new TrackManager();
@@ -31,12 +32,6 @@ namespace TrackSampleStart.DomainServices
             get { return _instance; }
         }
 
-        public void AddTalk(Talk talk)
-        {
-            var session = GetAvailableSession(talk);
-            session.Talks.Add(talk);
-        }
-
         public void AddTalks(IEnumerable<Talk> talks)
         {
             foreach (var talk in talks)
@@ -45,16 +40,12 @@ namespace TrackSampleStart.DomainServices
             }
         }
 
-        public List<Track> GetTracks()
+        public void AddTalk(Talk talk)
         {
-            return _tracks;
+            var session = GetAvailableSession(talk);
+            session.Talks.Add(talk);
         }
-
-        public void ClearTracks()
-        {
-            _tracks.Clear();
-        }
-
+        
         // todo niet echt pure code (ruben boos!)
         private Session GetAvailableSession(Talk talk)
         {
@@ -69,7 +60,7 @@ namespace TrackSampleStart.DomainServices
             //When no session found, create new track
             if (availableSession == null)
             {
-                var createdTrack = CreateNewTrack(talk);
+                var createdTrack = CreateNewTrack();
 
                 availableSession = createdTrack.GetAvailableSessionFromTrack(talk);
             }
@@ -81,7 +72,16 @@ namespace TrackSampleStart.DomainServices
             return availableSession;
         }
 
-        private Track CreateNewTrack(Talk talk)
+        public List<Track> GetTracks()
+        {
+            return _tracks;
+        }
+
+        public void ClearTracks()
+        {
+            _tracks.Clear();
+        }
+        private Track CreateNewTrack()
         {
             _trackId += 1;
             var newTrack = new Track()

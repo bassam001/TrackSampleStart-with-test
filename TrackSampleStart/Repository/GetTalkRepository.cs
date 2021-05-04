@@ -18,7 +18,7 @@ namespace TrackSampleStart.Repository
                 throw new FileNotFoundException("Could not find the file to process.");
 
             File = fileInfo;
-        }
+        } 
 
         public List<Talk> GetAll()
         {
