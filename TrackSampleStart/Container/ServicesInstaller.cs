@@ -10,7 +10,7 @@ public class ServicesInstaller : IWindsorInstaller
     {
         container.Register(Component.For<IService>().ImplementedBy<Service>());
         container.Register(Component.For<ITrackManager>().UsingFactoryMethod(x => TrackManager.Instance));
-        container.Register(Component.For<IParser>().ImplementedBy<Parser>());
+        container.Register(Component.For<IParser>().ImplementedBy<TalkParser>());
         container.Register(Component.For<TalkManager>());
 
     }

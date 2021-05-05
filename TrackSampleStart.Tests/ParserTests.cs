@@ -1,5 +1,4 @@
 ﻿using System;
-using Castle.Windsor;
 using FluentAssertions;
 using TrackSampleStart.Parsers;
 using Xunit;
@@ -7,26 +6,25 @@ using TrackSampleStart.Domain;
 
 namespace TrackSampleStart.Tests
 { 
-    public  class ParserTests
+    public  class ParserTests :IClassFixture<SharedContainerFixture>
     {
+        private SharedContainerFixture _container;
         private IParser _parser;
-        private IWindsorContainer _container;
         private Talk _talk;
         private Talk _lightningTalk;
         
-        public ParserTests()
+        public ParserTests(SharedContainerFixture container)
         {
-            _container = new WindsorContainer();
-            _container.Install(new ServicesInstaller());
-            _parser = _container.Resolve<IParser>();
-            _lightningTalk = new Talk { Title = "Rails for Python Developers lightning" };
+             _container = container;
+             _parser = _container.SharedWindsorContainer.Resolve<IParser>();
+             _lightningTalk = new Talk { Title = "Rails for Python Developers lightning" };
              _talk = new Talk { Title = "Lua for the Masses 30min"};
         }
 
         public void Act()
-        { 
-            _talk.Duration= _parser.MinuteParser(_talk.Title);
-           _lightningTalk.Duration = _parser.LightningParser((_lightningTalk.Title));
+        {
+            _talk.Duration = _parser.Time(_talk.Title);
+            _lightningTalk.Duration = _parser.Time((_lightningTalk.Title));
 
         }
 
@@ -35,7 +33,7 @@ namespace TrackSampleStart.Tests
         {
             Act();
 
-           _talk.Duration.Should().Be(new TimeSpan(00, 30, 00));
+            _talk.Duration.Should().Be(new TimeSpan(00, 30, 00));
            _parser.Success.Should().Be(true);
 
         }

@@ -3,22 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace TrackSampleStart.Parsers
 {
-    public class Parser : IParser
+    public class MinuteParser : Parser
     {
-        public bool Success { get; set; }
-
-        public  TimeSpan LightningParser(string text)
-        {
-            if (text.ToLower().EndsWith("lightning"))
-            {
-                Success = true;
-                return new TimeSpan(0, 5, 0);
-            }
-            Success = false;
-            return new TimeSpan(0, 0, 0);
-
-        }
-        public TimeSpan MinuteParser(string text)
+        public override TimeSpan Time(string text)
         {
             var result = 0;
             var matches = Regex.Match(text, @"(\d+)", RegexOptions.IgnoreCase);

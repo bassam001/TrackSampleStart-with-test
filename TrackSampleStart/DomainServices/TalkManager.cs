@@ -21,11 +21,9 @@ namespace TrackSampleStart.DomainServices
         {
             foreach (var item in entities)
             {
-                var result = _parser.MinuteParser(item.Title);
-                if (!_parser.Success)
-                    result = _parser.LightningParser(item.Title);
-                if (!_parser.Success) continue
-                    ;
+                var result = _parser.Time(item.Title);
+                if (!_parser.Success) continue;
+
                 item.Duration = result;
             }
         }

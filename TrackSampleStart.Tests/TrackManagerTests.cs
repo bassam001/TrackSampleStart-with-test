@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Windsor;
 using FluentAssertions;
 using TrackSampleStart.Domain;
 using TrackSampleStart.DomainServices;
@@ -9,17 +8,16 @@ using Xunit;
 
 namespace TrackSampleStart.Tests
 {
-    public class TrackManagerTests
+    public class TrackManagerTests : IClassFixture<SharedContainerFixture>
     {
-        private IWindsorContainer _container;
+        private SharedContainerFixture _container;
         private ITrackManager _trackManager;
         private List<Track> _tracks;
 
-        public TrackManagerTests()
+        public TrackManagerTests(SharedContainerFixture container)
         {
-            _container = new WindsorContainer();
-            _container.Install(new ServicesInstaller());
-            _trackManager = _container.Resolve<ITrackManager>();
+            _container = container;
+            _trackManager = _container.SharedWindsorContainer.Resolve<ITrackManager>();
             _trackManager.ClearTracks();
 
             _trackManager.AddTalk(new Talk { Duration = new System.TimeSpan(0, 60, 0) });

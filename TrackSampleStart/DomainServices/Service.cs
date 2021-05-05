@@ -17,8 +17,7 @@ namespace TrackSampleStart.DomainServices
         private readonly IGetTalkRepository _repository;
         private TalkManager _talkManager;
 
-        private static readonly string File = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName,
-            "talks.txt");
+     
         
         public Service(IGetTalkRepository repository,
                             TalkManager talkManager,
