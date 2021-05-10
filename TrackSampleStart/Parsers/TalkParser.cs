@@ -1,43 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TrackSampleStart.Infrastructure;
 
 namespace TrackSampleStart.Parsers
 {
     // todo Base class niet echt juist
-    public class TalkParser : Parser
+    public class TalkParser 
     {
-        public List<IParser> Parsers { get; set; }
+        public IEnumerable<IParser> Parsers { get; set; }
 
-        // Poor Man's Injection
-        public TalkParser()
-            : this(new List<IParser>
-            {
-                new MinuteParser(),
-                new LightningParser()
-            })
-        { }
-
-        public TalkParser(List<IParser> parsers)
+        public TalkParser(IEnumerable<IParser> parsers)
         {
             Utils.ThrowIfNull(() => parsers);
             Parsers = parsers;
         }
 
-        // Try to match a talk title with 1 of our parser expressions and return the result on success 
-        public override TimeSpan Time(string msg)
-        {
-            Success = false;
-            foreach (var parser in Parsers)
-            {
-                var result = parser.Time(msg);
-                if (parser.Success)
-                {
-                    this.Success = true;
-                    return result;
-                }
-            }
 
+        public TimeSpan Time(string msg)
+        {
+            var parser = Parsers.SingleOrDefault(c => c.IsMatch(msg));
+            if (parser != null)
+            {
+                return parser.Time(msg);
+            }
             throw new Exception("Can't process line");
         }
     }

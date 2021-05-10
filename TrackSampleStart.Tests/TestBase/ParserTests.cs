@@ -4,13 +4,14 @@ using Xunit;
 
 namespace TrackSampleStart.Tests
 {
-   public class ParserTestsFromArrangeClass : ArrangeClass
+    public class ParserTests : TestBase
     {
+
         public void Act()
-       {
-           _talk.Duration = _parser.Time(_talk.Title);
-           _lightningTalk.Duration = _parser.Time((_lightningTalk.Title));
-       }
+        {
+            _talk.Duration = _talkParser.Time(_talk.Title);
+            _lightningTalk.Duration = _talkParser.Time((_lightningTalk.Title));
+        }
 
         [Fact]
         public void It_should_parse_talk_duration()
@@ -18,7 +19,6 @@ namespace TrackSampleStart.Tests
             Act();
 
             _talk.Duration.Should().Be(new TimeSpan(00, 30, 00));
-            _parser.Success.Should().Be(true);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace TrackSampleStart.Tests
             Act();
 
             _lightningTalk.Duration.Should().Be(new TimeSpan(00, 5, 00));
-            _parser.Success.Should().Be(true);
+
         }
     }
 }

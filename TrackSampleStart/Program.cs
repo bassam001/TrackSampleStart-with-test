@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using TrackSampleStart.Domain;
 using TrackSampleStart.DomainServices;
+using TrackSampleStart.Parsers;
 using TrackSampleStart.Shared;
 
 namespace TrackSampleStart
@@ -14,10 +16,11 @@ namespace TrackSampleStart
         static void Main(string[] args)
         {
             var container = new WindsorContainer();
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
             container.Install(new RepositoryInstaller());
             container.Install(new ServicesInstaller());
 
-
+          
             var service = container.Resolve<IService>();
 
             var tracks = new List<Track>();

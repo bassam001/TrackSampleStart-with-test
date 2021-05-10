@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TrackSampleStart.Domain;
 using TrackSampleStart.Infrastructure;
 using TrackSampleStart.Parsers;
@@ -21,10 +22,9 @@ namespace TrackSampleStart.DomainServices
         {
             foreach (var item in entities)
             {
-                var result = _parser.Time(item.Title);
-                if (!_parser.Success) continue;
-
-                item.Duration = result;
+               if(_parser.IsMatch(item.Title))
+                    item.Duration  = _parser.Time(item.Title);
+                
             }
         }
     }
